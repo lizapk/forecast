@@ -3,14 +3,14 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-model = pickle.load(open('forecast-ar.sav','rb'))
+model = pickle.load(open('forecast-ar.sav', 'rb'))
 
 df = pd.read_csv("AirPassengers.csv")
 df['Month'] = pd.to_datetime(df['Month'], format='%Y-%m')
 df.set_index(['Month'], inplace=True)
 
 st.title('Forecasting Penumpang Pesawat')
-month = st.slider("Tentukan bulan",1,12, step=1)
+month = st.slider("Tentukan bulan", 1, 12, step=1)
 
 pred = model.forecast(month)
 pred = pd.DataFrame(pred, columns=['#Passengers'])
@@ -21,6 +21,9 @@ if st.button("Predict"):
 
     # Ensure 'Passengers' column is numeric
     pred['#Passengers'] = pred['#Passengers'].astype(float)
+
+    # Reset the index before plotting
+    pred.reset_index(inplace=True)
 
     with col1:
         st.dataframe(pred)
