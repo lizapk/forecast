@@ -15,6 +15,9 @@ month = st.slider("Tentukan bulan", 1, 12, step=1)
 pred = model.forecast(month)
 pred = pd.DataFrame(pred, columns=['#Passengers'])
 
+# Convert the 'Month' column in the pred DataFrame to the same format as df
+pred['Month'] = pd.date_range(start=df.index[-1], periods=len(pred), freq='M')
+
 if st.button("Predict"):
 
     col1, col2 = st.columns([2, 3])
@@ -22,13 +25,10 @@ if st.button("Predict"):
     # Ensure 'Passengers' column is numeric
     pred['#Passengers'] = pred['#Passengers'].astype(float)
 
-    # Reset the index before plotting
-    pred.reset_index(inplace=True)
-
     with col1:
         st.dataframe(pred)
     with col2:
         fig, ax = plt.subplots()
         df['#Passengers'].plot(style='--', color='gray', legend=True, label='known')
-        pred['#Passengers'].plot(color='b', legend=True, label='Prediction')
+        pred.plot(x='Month', y='#Passengers', color='b', legend=True, label='Prediction')
         st.pyplot(fig)
