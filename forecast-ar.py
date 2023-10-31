@@ -4,7 +4,6 @@ import numpy as np
 import pickle
 import matplotlib.pyplot as plt
 from statsmodels.tsa.arima_model import ARIMA
-from statsmodels.tsa.seasonal import seasonal_decompose
 
 # Muat model ARIMA dari file .sav
 model_file = 'forecast-ar.sav'
@@ -27,23 +26,18 @@ if st.button('Prediksi'):
     # Prediksi dengan model ARIMA
     forecast = model.forecast(steps=forecast_steps)
 
-    # Dekomposisi musiman
-    result = seasonal_decompose(data, model='additive')
-
     # Tampilkan data asli
     st.subheader('Data Asli')
     st.line_chart(data)
-
-    # Tampilkan hasil dekomposisi
-    st.subheader('Hasil Dekomposisi')
-    st.line_chart(result.trend)
-    st.line_chart(result.seasonal)
-    st.line_chart(result.resid)
 
     # Tampilkan hasil prediksi
     st.subheader('Hasil Prediksi')
     st.line_chart(forecast)
 
+    # Tampilkan Keseluruhan
+    st.subheader('Hasil Prediksi')
+    st.line_chart(data,forecast)
+                  
     # Tampilkan tabel hasil prediksi
     st.subheader('Tabel Hasil Prediksi')
     forecast_df = pd.DataFrame({
