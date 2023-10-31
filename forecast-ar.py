@@ -25,7 +25,7 @@ forecast_steps = st.slider('Jumlah Bulan Prediksi', 1, 24, 12)
 # Tombol "Prediksi"
 if st.button('Prediksi'):
     # Prediksi dengan model ARIMA
-    forecast, stderr, conf_int = model.forecast(steps=forecast_steps)
+    forecast = model.forecast(steps=forecast_steps)
 
     # Dekomposisi musiman
     result = seasonal_decompose(data, model='additive')
