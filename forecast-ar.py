@@ -10,7 +10,7 @@ df['Month'] = pd.to_datetime(df['Month'], format='%Y-%m')
 df.set_index(['Month'], inplace=True)
 
 st.title('Forecasting Penumpang Pesawat')
-month = st.slider("Tentukan bulan", 1, 12, step=1)
+month = st.slider("Tentukan bulan", 1, 30, step=1)
 
 pred = model.forecast(month)
 pred = pd.DataFrame(pred, columns=['#Passengers'])
