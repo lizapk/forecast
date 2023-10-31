@@ -19,10 +19,6 @@ if st.button("Predict"):
 
     col1, col2 = st.columns([2, 3])
 
-    # Convert the 'Month' column to a datetime format in the pred DataFrame
-    pred['Month'] = pd.date_range(start=df.index[-1], periods=month+1, freq='M')
-    pred.set_index(['Month'], inplace=True)
-
     # Ensure 'Passengers' column is numeric
     pred['#Passengers'] = pred['#Passengers'].astype(float)
 
