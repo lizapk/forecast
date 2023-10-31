@@ -83,21 +83,25 @@ Setelah itu baru kita import datasetnya:
 ```
 df = pd.read_csv("/content/air-passengers/AirPassengers.csv")
 ```
+
 2. menampilkan 5 baris pertama dataset
 ```
 df.head()
 ```
+
 3. cek tipe data
 ```
 df.info()
 ```
 ![Alt text](image.png)
+
 4. cek ukuran dataset
 ```
 df.shape
 ```
 (144, 2)
 dataset tersebut berisi 144 baris dengan 2 kolom
+
 5. Null Check
 ```
 df.isnull().sum()
@@ -124,6 +128,7 @@ kita tampilkan juga bagaimana grafik dari perubahan jumlah penumpang pasawatnya:
 df['#Passengers'].plot(figsize=(12,5));
 ```
 ![Alt text](image-1.png)
+
 Ternyata dalam beberapa periode waktu penumpang pesawat naik pesat dan juga grafik tersebut menunjukan jika penumpang pesawat cenderung naik.
 
 Selanjutnya kita bagi terlebih dahulu antara train dan test data:
@@ -168,12 +173,13 @@ plot_acf(diff_df)
 plot_pacf(diff_df)
 ```
 ![Alt text](image-3.png)
+
 ![Alt text](image-4.png)
 
 ## Modeling
 Ditahap modeling ini kita akan menggunakan 3 algoritma yang mana akan kita bandingkan algoritma terbaik yang selanjutnya akan dipakai untuk aplikasi tersebut.
 
-kita akan coba untuk memprediksi 43 bulan kedepan:
+Kita akan coba untuk memprediksi 43 bulan kedepan:
 
   ### Single Exponential Smoothing
 ```
@@ -186,6 +192,7 @@ train['#Passengers'].plot(style='--', color='gray', legend=True, label='train')
 test['#Passengers'].plot(style='--', color='r', legend=True, label='test')
 single_exp_test_pred.plot(color='b', legend=True, label='Prediction')
 ```
+
 ![Alt text](image-5.png)
 
 ```
@@ -200,8 +207,11 @@ print('Train MAPE :', Train_MAPE_SES)
 print('Test MAPE :', Test_MAPE_SES)
 ```
 Train RMSE : 23.47083303956671
+
 Test RMSE : 106.96706722437959
+
 Train MAPE : 0.08532342002218128
+
 Test MAPE : 0.17254543771244724
 
   ## Double Exponential Smoothing
@@ -229,8 +239,11 @@ print('Train MAPE :', Train_MAPE_DES)
 print('Test MAPE :', Test_MAPE_DES)
 ```
 Train RMSE : 23.283893193337274
+
 Test RMSE : 94.57214255933388
+
 Train MAPE : 0.07900374086543273
+
 Test MAPE : 0.15438871066201712
 
   ## ARIMA
@@ -257,8 +270,11 @@ print('Train MAPE :', Train_MAPE_AR)
 print('Test MAPE :', Test_MAPE_AR)
 ```
 Train RMSE : 14.20071832771583
+
 Test RMSE : 45.285402548094446
+
 Train MAPE : 0.04423659596567478
+
 Test MAPE : 0.0929043309516595
 
 Selanjutnya mari kita evaluasi 3 algoritma tersebut
