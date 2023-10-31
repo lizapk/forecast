@@ -25,30 +25,26 @@ forecast_steps = st.slider('Jumlah Bulan Prediksi', 1, 36, 12)
 if st.button('Prediksi'):
     # Prediksi dengan model ARIMA
     forecast = model.forecast(steps=forecast_steps)
+    
+    # Tampilkan data asli
+    st.subheader('Data Asli')
+    st.line_chart(data)
 
-    col1, col2 = st.columns([2,3])
-    with col1:
-        # Tampilkan data asli
-        st.subheader('Data Asli')
-        st.line_chart(data)
-    with col2:
-        # Tampilkan hasil prediksi
-        st.subheader('Hasil Prediksi')
-        st.line_chart(forecast)
+    # Tampilkan hasil prediksi
+    st.subheader('Hasil Prediksi')
+    st.line_chart(forecast)
         
-    col1, col2 = st.columns([2,3])
-    with col1:
-        # Tampilkan grafik data asli dengan hasil prediksi
-        st.subheader('Grafik Data Asli dengan Hasil Prediksi')
-        fig, ax = plt.subplots()
-        data['#Passengers'].plot(style='--', color='gray', legend=True, label='Data Asli', ax=ax)
-        forecast.plot(color='b', legend=True, label='Prediksi', ax=ax)
-        st.pyplot(fig)
-    with col2:
-        # Tampilkan tabel hasil prediksi
-        st.subheader('Tabel Hasil Prediksi')
-        forecast_df = pd.DataFrame({
-        'Tanggal': pd.date_range(start=data.index[-1], periods=forecast_steps, freq='M'),
-        'Prediksi': forecast
-        })
+    # Tampilkan grafik data asli dengan hasil prediksi
+    st.subheader('Grafik Data Asli dengan Hasil Prediksi')
+    fig, ax = plt.subplots()
+    data['#Passengers'].plot(style='--', color='gray', legend=True, label='Data Asli', ax=ax)
+    forecast.plot(color='b', legend=True, label='Prediksi', ax=ax)
+    st.pyplot(fig)
+    
+    # Tampilkan tabel hasil prediksi
+    st.subheader('Tabel Hasil Prediksi')
+    forecast_df = pd.DataFrame({
+    'Tanggal': pd.date_range(start=data.index[-1], periods=forecast_steps, freq='M'),
+    'Prediksi': forecast
+    })
     st.dataframe(forecast_df)
