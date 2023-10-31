@@ -8,6 +8,7 @@ model = pickle.load(open('forecast-ar.sav','rb'))
 df = pd.read_csv("AirPassengers.csv")
 df['Month'] = pd.to_datetime(df['Month'], format='%Y-%m')
 df.set_index(['Month'], inplace=True)
+pred['#Passengers'] = pred['#Passengers'].astype(float)
 
 st.title('Forecasting Penumpang Pesawat')
 month = st.slider("Tentukan bulan",1,12, step=1)
