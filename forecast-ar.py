@@ -1,34 +1,65 @@
-import pickle
+# Import library yang diperlukan
 import streamlit as st
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
-from datetime import datetime, timedelta
+from statsmodels.tsa.arima_model import ARIMA
+from statsmodels.tsa.seasonal import seasonal_decompose
 
-# Load the model
-model = pickle.load(open('forecast-ar.sav', 'rb'))
+# Fungsi untuk memuat data dan model ARIMA
+def load_data_and_model(data_file, model_file):
+    # Muat data time series
+    data = pd.read_csv("AirPassengers.csv")
+    
+    # Muat model ARIMA
+    model = ARIMA
+    model = model.load("forecast-ar.sav")
+    
+    return data, model
 
-# Load the historical data
-df = pd.read_csv("AirPassengers.csv")
-df['Month'] = pd.to_datetime(df['Month'], format='%Y-%m')
-df.set_index(['Month'], inplace=True)
+# Fungsi untuk menampilkan grafik
+def plot_data_and_forecast(data, model, forecast_steps):
+    # Dekomposisi musiman
+    result = seasonal_decompose(data, model='additive')
+    
+    # Plot data asli
+    st.subheader('Data Asli')
+    st.line_chart(data)
+    
+    # Plot hasil dekomposisi
+    st.subheader('Hasil Dekomposisi')
+    st.line_chart(result.trend)
+    st.line_chart(result.seasonal)
+    st.line_chart(result.resid)
+    
+    # Prediksi
+    forecast, stderr, conf_int = model.forecast(steps=forecast_steps)
+    
+    # Plot hasil prediksi
+    st.subheader('Hasil Prediksi')
+    st.line_chart(forecast)
+    
+    # Tampilkan tabel hasil prediksi
+    st.subheader('Tabel Hasil Prediksi')
+    forecast_df = pd.DataFrame({
+        'Waktu': pd.date_range(start=data.index[-1], periods=forecast_steps + 1, closed='right'),
+        'Prediksi': forecast
+    })
+    st.dataframe(forecast_df)
 
-st.title('Forecasting Penumpang Pesawat')
-month = st.slider("Tentukan bulan", 1, 30, step=1)
+# Main Streamlit app
+def main():
+    st.title('ARIMA Forecasting App')
+    
+    data_file = st.file_uploader('Upload file data time series (CSV)', type=['csv'])
+    model_file = st.file_uploader('Upload file model ARIMA', type=['pkl'])
+    
+    if data_file is not None and model_file is not None:
+        data, model = load_data_and_model(data_file, model_file)
+        
+        forecast_steps = st.slider('Jumlah Langkah Prediksi', 1, 365, 30)
+        
+        plot_data_and_forecast(data, model, forecast_steps)
 
-pred = model.forecast(month)
-pred = pd.DataFrame(pred, columns=['#Passengers'])
-
-# Generate date range for the predictions
-last_date = df.index[-1]
-date_range = [last_date + timedelta(days=i*30) for i in range(1, month+1)]
-pred['Month'] = date_range
-
-if st.button("Predict"):
-    col1, col2 = st.columns([2, 3])
-    with col1:
-        st.dataframe(pred)
-    with col2:
-        fig, ax = plt.subplots()
-        df['#Passengers'].plot(style='--', color='gray', legend=True, label='known')
-        pred.plot(x='Month', y='#Passengers', color='b', legend=True, label='Prediction')
-        st.pyplot(fig)
+if __name__ == '__main__':
+    main()
