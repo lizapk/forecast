@@ -15,16 +15,9 @@ month = st.slider("Tentukan bulan", 1, 30, step=1)
 pred = model.forecast(month)
 pred = pd.DataFrame(pred, columns=['#Passengers'])
 
-# Convert the 'Month' column in the pred DataFrame to the same format as df
-pred['Month'] = pd.date_range(start=df.index[-1], periods=len(pred), freq='M')
-
 if st.button("Predict"):
 
     col1, col2 = st.columns([2, 3])
-
-    # Ensure 'Passengers' column is numeric
-    pred['#Passengers'] = pred['#Passengers'].astype(float)
-
     with col1:
         st.dataframe(pred)
     with col2:
