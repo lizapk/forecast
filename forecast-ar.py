@@ -19,7 +19,7 @@ data.set_index('Month', inplace=True)
 st.title('ARIMA Forecasting App')
 
 # Slider untuk menentukan jumlah bulan yang akan diprediksi
-forecast_steps = st.slider('Jumlah Bulan Prediksi', 1, 24, 12)
+forecast_steps = st.slider('Jumlah Bulan Prediksi', 1, 36, 12)
 
 # Tombol "Prediksi"
 if st.button('Prediksi'):
@@ -34,9 +34,12 @@ if st.button('Prediksi'):
     st.subheader('Hasil Prediksi')
     st.line_chart(forecast)
 
-    # Tampilkan Keseluruhan
-    st.subheader('Hasil Prediksi')
-    st.line_chart(data,forecast)
+    # Tampilkan grafik data asli dengan hasil prediksi
+    st.subheader('Grafik Data Asli dengan Hasil Prediksi')
+    fig, ax = plt.subplots()
+    data['#Passengers'].plot(style='--', color='gray', legend=True, label='Data Asli', ax=ax)
+    forecast.plot(color='b', legend=True, label='Prediksi', ax=ax)
+    st.pyplot(fig)
                   
     # Tampilkan tabel hasil prediksi
     st.subheader('Tabel Hasil Prediksi')
