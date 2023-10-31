@@ -7,7 +7,7 @@ from statsmodels.tsa.arima_model import ARIMA
 from statsmodels.tsa.seasonal import seasonal_decompose
 
 # Muat model ARIMA dari file .sav
-model_file = 'model_forecast-ar.sav'
+model_file = 'forecast-ar.sav'
 model = pickle.load(open(model_file, 'rb'))
 
 # Muat dataset AirPassengers.csv
